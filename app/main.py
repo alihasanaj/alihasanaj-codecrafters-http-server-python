@@ -23,7 +23,7 @@ def main():
             else:
                 conn.send(b"HTTP/1.1 404 Not Found\r\n\r\n")
     
-
+    server_socket.close()
 
 if __name__ == "__main__":
     main()
