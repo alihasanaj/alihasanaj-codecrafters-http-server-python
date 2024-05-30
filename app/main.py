@@ -17,7 +17,7 @@ def main():
             data = conn.recv(1024)
             print(data)
             if not data: break
-            conn.send(data)
+            conn.send("HTTP/1.1 404 Not Found\r\n\r\n")
     
 
 
