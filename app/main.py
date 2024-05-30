@@ -19,7 +19,6 @@ def main():
             if not data: break
             conn.send(data)
     
-    conn.recv(b"GET \/index.html HTTP/1.1\r\nHost: localhost:4221\r\nUser-Agent: curl/7.64.1\r\nAccept: */*\r\n\r\n")
 
 
 if __name__ == "__main__":
