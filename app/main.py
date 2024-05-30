@@ -17,7 +17,11 @@ def main():
             data = conn.recv(1024)
             print("Your data", data)
             if not data: break
-            conn.send(b"HTTP/1.1 404 Not Found\r\n\r\n")
+            
+            if b"GET / HTTP" in data:
+                conn.send(b"HTTP/1.1 200 OK\r\n\r\n")
+            else:
+                conn.send(b"HTTP/1.1 404 Not Found\r\n\r\n")
     
 
 
