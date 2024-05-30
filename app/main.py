@@ -11,7 +11,7 @@ def main():
     server_socket = socket.create_server(("localhost", 4221), reuse_port=False)
     (conn, address) = server_socket.accept() # wait for client
     
-    c.send("Hello World")
+    server_socket.send("Hello World")
 
 
 if __name__ == "__main__":
