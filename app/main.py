@@ -11,7 +11,13 @@ def main():
     server_socket = socket.create_server(("localhost", 4221), reuse_port=False)
     (conn, address) = server_socket.accept() # wait for client
     
-    #conn.send(b"HTTP/1.1 200 OK\r\n\r\n")
+    with conn:
+        print("Connected by", address)
+        while True:
+            data = conn.recv(1024)
+            print(data)
+            if not data: break
+            conn.send(data)
     
     conn.recv(b"GET /index.html HTTP/1.1\r\nHost: localhost:4221\r\nUser-Agent: curl/7.64.1\r\nAccept: */*\r\n\r\n")
 
