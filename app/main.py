@@ -15,9 +15,9 @@ def main():
         print("Connected by", address)
         while True:
             data = conn.recv(1024)
-            print(data)
+            print("Your data", data)
             if not data: break
-            conn.send("HTTP/1.1 404 Not Found\r\n\r\n")
+            conn.send(b"HTTP/1.1 404 Not Found\r\n\r\n")
     
 
 
