@@ -16,8 +16,8 @@ def main():
         while True:
             data = conn.recv(1024)
             if not data: break
-            start = data.find('/echo/') + 6
-            end = data.find("HTTP", start)
+            start = data.find(b'/echo/') + 6
+            end = data.find(b"HTTP", start)
             result = data[start:end]
             print(result)
             
