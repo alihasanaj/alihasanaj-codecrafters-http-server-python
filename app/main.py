@@ -15,8 +15,11 @@ def main():
         print("Connected by", address)
         while True:
             data = conn.recv(1024)
-            print("Your data", data)
             if not data: break
+            start = data.find('/echo/') + 6
+            end = data.find("HTTP", start)
+            result = data[start:end]
+            print(result)
             
             if b"GET / HTTP" in data:
                 conn.send(b"HTTP/1.1 200 OK\r\n\r\n")
