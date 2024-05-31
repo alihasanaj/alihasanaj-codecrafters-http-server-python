@@ -34,7 +34,7 @@ def request_handler(conn: socket.socket):
                 string = path.replace("User-Agent: ", "")
                 response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
             if "files" in path[1]:
-                print(os.path.exists(path[1]))
+                print(path[2])
                 if os.path.exists(path[1]):
                     with open(f"{path[1]}") as f:
                         lines = f.readlines()
