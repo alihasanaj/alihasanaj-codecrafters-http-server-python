@@ -8,8 +8,8 @@ def main():
 
     # Uncomment this to pass the first stage
     #
+    server_socket = socket.create_server(("localhost", 4221), reuse_port=False)
     while True:
-        server_socket = socket.create_server(("localhost", 4221), reuse_port=False)
         (conn, address) = server_socket.accept() # wait for client
         t =threading.Thread(target=lambda: request_handler(conn))
         t.start()
