@@ -16,16 +16,14 @@ def main():
         while True:
             data = conn.recv(1024)
             if not data: break
-            start = data.find(b'/echo/')
-            end = data.find(b"HTTP", start)
+            start = data.find(b'/echo/') + 7
+            end = data.find(b" HTTP", start)
             result = data[start:end]
             print(data)
             print(result)
             
-            if b"GET / HTTP" in data:
-                conn.send(b"HTTP/1.1 200 OK\r\n\r\n")
-            else:
-                conn.send(b"HTTP/1.1 404 Not Found\r\n\r\n")
+            
+            conn.send(b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 3\r\n\r\n")
     
     server_socket.close()
 
