@@ -16,14 +16,14 @@ def main():
         while True:
             data = conn.recv(1024)
             if not data: break
-            start = data.find(b'/echo/') + 7
+            start = data.find(b'/echo/') + 6
             end = data.find(b" HTTP", start)
             result = data[start:end]
             print(data)
             print(result)
             
             
-            conn.send(b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: 3\r\n\r\n")
+            conn.send(b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + str(len(result)) + "\r\n\r\n" + result)
     
     server_socket.close()
 
