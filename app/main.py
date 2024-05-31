@@ -1,6 +1,6 @@
 # Uncomment this to pass the first stage
 import socket
-
+import threading
 
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -8,10 +8,14 @@ def main():
 
     # Uncomment this to pass the first stage
     #
-    server_socket = socket.create_server(("localhost", 4221), reuse_port=False)
-    (conn, address) = server_socket.accept() # wait for client
+    while True:
+        server_socket = socket.create_server(("localhost", 4221), reuse_port=False)
+        (conn, address) = server_socket.accept() # wait for client
+        t =threading.Thread(target=lambda: request_handler(conn))
+        t.start()
     
-    with conn:
+    
+def request_handler(conn: socket.socket)
         val = conn.recv(1024)
         pars = val.decode()
         args = pars.split("\r\n")
@@ -28,12 +32,8 @@ def main():
                 path = args[2]
                 string = path.replace("User-Agent: ", "")
                 response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
-                
-    
         conn.sendall(response)    
-        
-    
-    server_socket.close()
+        conn.close()
 
 if __name__ == "__main__":
     main()
