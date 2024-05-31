@@ -40,7 +40,7 @@ def request_handler(conn: socket.socket):
                 if os.path.isfile(f"/{directory}/{file}"):
                     with open(f"/{directory}/{file}", "r") as f:
                         lines = f.readlines()
-                    response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(lines)}\r\n\r\n{lines}".encode()
+                    response = f"HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {len(lines)}\r\n\r\n{lines}".encode()
                 else:
                     print("Sending 404")
                     response = b"HTTP/1.1 404 Not Found\r\n\r\n"
