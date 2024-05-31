@@ -39,7 +39,10 @@ def request_handler(conn: socket.socket):
                 file = path[1].replace("/files/", "")
                 if os.path.isfile(f"/{directory}/{file}"):
                     with open(f"/{directory}/{file}", "r") as f:
-                        lines = f.readlines()
+                        lines = ""
+                        for word in f:
+                            lines += word
+                        lines_len = len(lines)
                     response = f"HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {len(lines)}\r\n\r\n{lines}".encode()
                 else:
                     print("Sending 404")
