@@ -34,10 +34,10 @@ def request_handler(conn: socket.socket):
                 string = path.replace("User-Agent: ", "")
                 response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
             if "files" in path[1]:
-                print(path[1])
-                if os.path.isfile(path[1]):
-                    file = os.path.isfile(path[1])
-                    response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(file)}\r\n\r\n{file}".encode()
+                if os.path.exists(path[1]):
+                    with open(f"{path[1]}") as f:
+                        lines = f.readlines()
+                    response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(lines)}\r\n\r\n{lines}".encode()
                 else:
                     response = b"HTTP/1.1 404 Not Found\r\n\r\n"
                 
