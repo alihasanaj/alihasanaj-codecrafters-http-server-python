@@ -22,7 +22,7 @@ def main():
             if path[1] == "/":
                 response = b"HTTP/1.1 200 OK\r\n\r\n"
             if "echo" in path[1]:
-                string = path[1].strip("/echo/")
+                string = path[1].replace("/echo/", "")
                 response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
             if "user" in path[1]:
                 path = args[2]
