@@ -2,6 +2,7 @@
 import socket
 import threading
 import os
+import sys
 
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -34,9 +35,10 @@ def request_handler(conn: socket.socket):
                 string = path.replace("User-Agent: ", "")
                 response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
             if "files" in path[1]:
-                print(path[1])
-                if os.path.exists(path[1]):
-                    with open(f"{path[1]}") as f:
+                directory = sys.argv[2]
+                file = path[1].replace("/files/", "")
+                if os.path.isfile(f"/{directory}/{file}"):
+                    with open(f"/{directory}/{file}", "r") as f:
                         lines = f.readlines()
                     response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(lines)}\r\n\r\n{lines}".encode()
                 else:
