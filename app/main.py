@@ -1,6 +1,7 @@
 # Uncomment this to pass the first stage
 import socket
 import threading
+import os
 
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -32,6 +33,13 @@ def request_handler(conn: socket.socket):
                 path = args[2]
                 string = path.replace("User-Agent: ", "")
                 response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
+            if "files" in path[1]:
+                if os.path.isfile(path[1]):
+                    file = os.path.isfile(path[1])
+                    response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(file)}\r\n\r\n{file}".encode()
+                else:
+                    response = b"HTTP/1.1 404 Not Found\r\n\r\n"
+                
         conn.sendall(response)    
         conn.close()
 
