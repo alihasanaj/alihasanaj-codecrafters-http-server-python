@@ -15,7 +15,7 @@ def main():
         t.start()
     
     
-def request_handler(conn: socket.socket)
+def request_handler(conn: socket.socket):
         val = conn.recv(1024)
         pars = val.decode()
         args = pars.split("\r\n")
