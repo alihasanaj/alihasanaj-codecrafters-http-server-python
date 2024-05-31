@@ -12,18 +12,22 @@ def main():
     (conn, address) = server_socket.accept() # wait for client
     
     with conn:
-        print("Connected by", address)
-        while True:
-            data = conn.recv(1024)
-            if not data: break
-            start = data.find(b'/echo/') + 6
-            end = data.find(b" HTTP", start)
-            result = data[start:end]
-            print(data)
-            print(result)
+        val = conn.recv(1024)
+        pars = val.decode()
+        args = pars.split("\r\n")
+        print(args)
+        response = b"HTTP/1.1 404 Not Found\r\n\r\n"
+        if len(args) > 1:
+            path = args[0].split(" ")
+            if path[1] == "/":
+                response = b"HTTP/1.1 200 OK\r\n\r\n"
+            if "echo" in path[1]:
+                string = path[1].strip("/echo/")
+                response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}"
             
-            
-            conn.send(b"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: " + str(len(result)) + "\r\n\r\n" + result)
+        print(f"Recived: {val}")
+        conn.sendall(response)    
+        
     
     server_socket.close()
 
