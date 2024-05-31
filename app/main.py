@@ -25,7 +25,10 @@ def main():
                 string = path[1].strip("/echo/")
                 response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
             if "user" in path[1]:
-                print("user -> ", path[3])
+                path = args[2]
+                string = path.strip("User-Agent: ")
+                print(string)
+                
         print(f"Recived: {val}")
         conn.sendall(response)    
         
