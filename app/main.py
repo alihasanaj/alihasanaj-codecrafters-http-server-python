@@ -41,7 +41,7 @@ def request_handler(conn: socket.socket):
                     response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(lines)}\r\n\r\n{lines}".encode()
                 else:
                     print("Sending 404")
-                    response = b"HTTP/1.1 404 Not Found\r\n\r\n".encode()
+                    response = b"HTTP/1.1 404 Not Found\r\n\r\n"
                 
         conn.sendall(response)    
         conn.close()
