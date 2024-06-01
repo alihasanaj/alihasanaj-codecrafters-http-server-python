@@ -3,6 +3,7 @@ import socket
 import threading
 import os
 import sys
+import gzip
 
 def main():
     # You can use print statements as follows for debugging, they'll be visible when running tests.
@@ -60,11 +61,13 @@ def request_handler(conn: socket.socket):
                 response = response_200
             elif request_target.startswith("/echo/"):
                 string = request_target.replace("/echo/", "")
+                string = gzip.compress(string)
                 if "Encoding" in user_agent:
                     encoding_type = user_agent.replace("Accept-Encoding: ", "")
                     if "," in encoding_type:
                         encoding_type = user_agent.replace(" ", "")
                         encoding_type = encoding_type.split(",")
+                    
                     
                     print(encoding_type)
                     if "gzip" == encoding_type:
