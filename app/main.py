@@ -32,7 +32,7 @@ def request_handler(conn: socket.socket):
         header_host = args[1]
         user_agent = args[2]
         media_type = args[3]
-        body = args[4]
+        req_body = args[4]
         
         print(f"http method: {http_method}")
         print(f"request target: {request_target}")
@@ -53,31 +53,33 @@ def request_handler(conn: socket.socket):
         
         response = response_404
         if len(args) > 1:
-            path = args[0].split(" ")
             if request_target == "/":
                 response = response_200
             elif request_target.startswith("/echo/"):
                 string = request_target.replace("/echo/", "")
+                if "Encoding" in media_type:
+                    encoding_type = media_type.split(" ")[1]
+                    response = f"HTTP/1.1 200 OK\r\nContent-Encoding: {encoding_type}\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
+                else:
+                    response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
+            elif "user" in request_target:
+                string = user_agent.replace("User-Agent: ", "")
                 response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
-            if "user" in path[1]:
-                path = args[2]
-                string = path.replace("User-Agent: ", "")
-                response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
-            if "files" in path[1]:
-                if "POST" in path[0]:
+            elif "files" in request_target:
+                if "POST" in http_method:
                     directory = sys.argv[2]
                     try:
                         os.mkdir(directory)
                     except FileExistsError as e:
                         print(f"Directory {directory} already exist")
-                    file = path[1].replace("/files/", "")
-                    body = args[-1]
+                    file = request_target.replace("/files/", "")
+                    body = req_body
                     with open(os.path.join(directory, file), "w") as f:
                         f.write(body)
-                    response = f"HTTP/1.1 201 Created\r\n\r\n".encode()
+                    response = response_201
                 else:
                     directory = sys.argv[2]
-                    file = path[1].replace("/files/", "")
+                    file = request_target.replace("/files/", "")
                     if os.path.isfile(f"/{directory}/{file}"):
                         with open(f"/{directory}/{file}", "r") as f:
                             lines = ""
@@ -86,8 +88,7 @@ def request_handler(conn: socket.socket):
                             lines_len = len(lines)
                         response = f"HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {lines_len}\r\n\r\n{lines}".encode()
                     else:
-                        print("Sending 404")
-                        response = b"HTTP/1.1 404 Not Found\r\n\r\n"
+                        response = response_404
                 
         conn.sendall(response)    
         conn.close()
