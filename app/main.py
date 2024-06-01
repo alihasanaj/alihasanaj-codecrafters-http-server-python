@@ -57,8 +57,8 @@ def request_handler(conn: socket.socket):
                 response = response_200
             elif request_target.startswith("/echo/"):
                 string = request_target.replace("/echo/", "")
-                if "Encoding" in media_type:
-                    encoding_type = media_type.split(" ")[1]
+                if "Encoding" in user_agent:
+                    encoding_type = user_agent.split(" ")[1]
                     response = f"HTTP/1.1 200 OK\r\nContent-Encoding: {encoding_type}\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
                 else:
                     response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
