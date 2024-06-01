@@ -35,18 +35,29 @@ def request_handler(conn: socket.socket):
                 string = path.replace("User-Agent: ", "")
                 response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
             if "files" in path[1]:
-                directory = sys.argv[2]
-                file = path[1].replace("/files/", "")
-                if os.path.isfile(f"/{directory}/{file}"):
-                    with open(f"/{directory}/{file}", "r") as f:
-                        lines = ""
-                        for word in f:
-                            lines += word
-                        lines_len = len(lines)
-                    response = f"HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {len(lines)}\r\n\r\n{lines}".encode()
+                print(path)
+                if "POST" in path:
+                    directory = sys.argv[2]
+                    try:
+                        os.mkdir(directory)
+                    except FileExistsError as e:
+                        print(f"Directory {directory} already exist")
+                    file = path[1].replace("/files/" "")
+                    
+                    
                 else:
-                    print("Sending 404")
-                    response = b"HTTP/1.1 404 Not Found\r\n\r\n"
+                    directory = sys.argv[2]
+                    file = path[1].replace("/files/", "")
+                    if os.path.isfile(f"/{directory}/{file}"):
+                        with open(f"/{directory}/{file}", "r") as f:
+                            lines = ""
+                            for word in f:
+                                lines += word
+                            lines_len = len(lines)
+                        response = f"HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {len(lines_len)}\r\n\r\n{lines}".encode()
+                    else:
+                        print("Sending 404")
+                        response = b"HTTP/1.1 404 Not Found\r\n\r\n"
                 
         conn.sendall(response)    
         conn.close()
