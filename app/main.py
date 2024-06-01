@@ -51,6 +51,9 @@ def request_handler(conn: socket.socket):
         # Custom responses
         response_201 = f"HTTP/1.1 201 Created\r\n\r\n".encode()
         
+        # supported encoding
+        encodes = ["gzip"]
+        
         response = response_404
         if len(args) > 1:
             if request_target == "/":
@@ -59,7 +62,11 @@ def request_handler(conn: socket.socket):
                 string = request_target.replace("/echo/", "")
                 if "Encoding" in user_agent:
                     encoding_type = user_agent.split(" ")[1]
-                    response = f"HTTP/1.1 200 OK\r\nContent-Encoding: {encoding_type}\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
+                    if encoding_type in encodes:
+                        response = f"HTTP/1.1 200 OK\r\nContent-Encoding: {encoding_type}\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
+                    else:
+                        response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
+                    
                 else:
                     response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
             elif "user" in request_target:
