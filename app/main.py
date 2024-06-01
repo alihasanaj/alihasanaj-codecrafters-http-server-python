@@ -21,7 +21,6 @@ def request_handler(conn: socket.socket):
         val = conn.recv(1024)
         pars = val.decode()
         args = pars.split("\r\n")
-        print(args)
         response = b"HTTP/1.1 404 Not Found\r\n\r\n"
         if len(args) > 1:
             path = args[0].split(" ")
@@ -35,7 +34,7 @@ def request_handler(conn: socket.socket):
                 string = path.replace("User-Agent: ", "")
                 response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
             if "files" in path[1]:
-                print(f"path: {path[-1]}")
+                print(f"path: {args[-1]}")
                 if "POST" in path:
                     directory = sys.argv[2]
                     try:
