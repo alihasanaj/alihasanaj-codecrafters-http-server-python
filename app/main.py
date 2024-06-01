@@ -34,7 +34,7 @@ def request_handler(conn: socket.socket):
                 string = path.replace("User-Agent: ", "")
                 response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
             if "files" in path[1]:
-                print(f"path: {args[-1]}")
+                
                 if "POST" in path:
                     directory = sys.argv[2]
                     try:
@@ -42,6 +42,10 @@ def request_handler(conn: socket.socket):
                     except FileExistsError as e:
                         print(f"Directory {directory} already exist")
                     file = path[1].replace("/files/", "")
+                    body = args[-1]
+                    with open(os.path.join(directory, file), "w") as f:
+                        f.write(body)
+                    response = f"HTTP/1.1 201 Created\r\n\r\n".encode()
                 else:
                     directory = sys.argv[2]
                     file = path[1].replace("/files/", "")
