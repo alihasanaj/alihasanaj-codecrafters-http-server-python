@@ -62,6 +62,7 @@ def request_handler(conn: socket.socket):
                 string = request_target.replace("/echo/", "")
                 if "Encoding" in user_agent:
                     encoding_type = user_agent.replace("Accept-Encoding: ", "")
+                    encoding_type = user_agent.replace(" ", "")
                     encoding_type = encoding_type.split(",")
                     print(encoding_type)
                     if "gzip" in encoding_type:
