@@ -62,6 +62,7 @@ def request_handler(conn: socket.socket):
                 string = request_target.replace("/echo/", "")
                 if "Encoding" in user_agent:
                     encoding_type = user_agent.split(" ")[1]
+                    print(f"Types of endcoding: {encoding_type}" )
                     if encoding_type in encodes:
                         response = f"HTTP/1.1 200 OK\r\nContent-Encoding: {encoding_type}\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
                     else:
