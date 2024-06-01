@@ -89,8 +89,8 @@ def request_handler(conn: socket.socket):
                         response = f"HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {lines_len}\r\n\r\n{lines}".encode()
                     else:
                         response = response_404
-                
-        conn.sendall(response)    
+        print(f"Response Sent: {response}")   
+        conn.sendall(response)
         conn.close()
 
 if __name__ == "__main__":
