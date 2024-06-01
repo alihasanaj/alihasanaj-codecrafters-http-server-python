@@ -41,7 +41,7 @@ def request_handler(conn: socket.socket):
         print(f"Host: {header_host}")
         print(f"Agent: {user_agent}")
         print(f"Type: {media_type}")
-        print(f"Body: {body}")
+        print(f"Body: {req_body}")
             
             
         # Default responses
