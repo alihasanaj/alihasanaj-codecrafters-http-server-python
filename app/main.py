@@ -52,7 +52,7 @@ def request_handler(conn: socket.socket):
         response_201 = f"HTTP/1.1 201 Created\r\n\r\n".encode()
         
         # supported encoding
-        encodes = ["gzip"]
+        supported_encodes = ["gzip"]
         
         response = response_404
         if len(args) > 1:
@@ -61,9 +61,10 @@ def request_handler(conn: socket.socket):
             elif request_target.startswith("/echo/"):
                 string = request_target.replace("/echo/", "")
                 if "Encoding" in user_agent:
-                    encoding_type = user_agent.split(" ")[1]
-                    print(f"Types of endcoding: {encoding_type}" )
-                    if encoding_type in encodes:
+                    encoding_type = user_agent.replace("Accept-Encoding: ", "")
+                    encoding_type = encoding_type.split(",")
+                    print(encoding_type)
+                    if "gzip" in encoding_type:
                         response = f"HTTP/1.1 200 OK\r\nContent-Encoding: {encoding_type}\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
                     else:
                         response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
