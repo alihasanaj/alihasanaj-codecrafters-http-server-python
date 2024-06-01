@@ -32,7 +32,7 @@ def request_handler(conn: socket.socket):
         header_host = args[1]
         user_agent = args[2]
         media_type = args[3]
-        req_body = args[4]
+        req_body = args[-1]
         
         print(f"http method: {http_method}")
         print(f"request target: {request_target}")
