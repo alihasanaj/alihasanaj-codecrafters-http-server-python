@@ -61,8 +61,9 @@ def request_handler(conn: socket.socket):
                 response = response_200
             elif request_target.startswith("/echo/"):
                 string = request_target.replace("/echo/", "")
-                string = gzip.compress(string.encode("utf-8"))
+                
                 if "Encoding" in user_agent:
+                    string = gzip.compress(string.encode("utf-8"))
                     encoding_type = user_agent.replace("Accept-Encoding: ", "")
                     if "," in encoding_type:
                         encoding_type = user_agent.replace(" ", "")
@@ -77,7 +78,6 @@ def request_handler(conn: socket.socket):
                         response = f"HTTP/1.1 200 OK\r\nContent-Encoding: {encoding_type[index]}\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
                     else:
                         response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
-                    
                 else:
                     response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
             elif "user" in request_target:
