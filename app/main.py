@@ -61,7 +61,7 @@ def request_handler(conn: socket.socket):
                 response = response_200
             elif request_target.startswith("/echo/"):
                 string = request_target.replace("/echo/", "")
-                string = gzip.compress(string)
+                string = gzip.compress(string.encode())
                 if "Encoding" in user_agent:
                     encoding_type = user_agent.replace("Accept-Encoding: ", "")
                     if "," in encoding_type:
