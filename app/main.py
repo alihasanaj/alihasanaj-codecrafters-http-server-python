@@ -71,7 +71,7 @@ def request_handler(conn: socket.socket):
                     
                     print(encoding_type)
                     if "gzip" == encoding_type:
-                        response = f"HTTP/1.1 200 OK\r\nContent-Encoding: {encoding_type}\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
+                        response = f"HTTP/1.1 200 OK\r\nContent-Encoding: {encoding_type}\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n".encode() + string
                     elif "gzip" in encoding_type:
                         index = encoding_type.index("gzip")
                         response = f"HTTP/1.1 200 OK\r\nContent-Encoding: {encoding_type[index]}\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
