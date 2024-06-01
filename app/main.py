@@ -21,6 +21,29 @@ def request_handler(conn: socket.socket):
         val = conn.recv(1024)
         pars = val.decode()
         args = pars.split("\r\n")
+        
+        # Split the request line and extract http info
+        request_line = args[0].split(" ")
+        http_method = request_line[0]
+        request_target = request_line[1]
+        http_version = request_line[2]
+        
+        # Split the headers line
+        header_host = args[1]
+        user_agent = args[2]
+        media_type = args[3]
+        body = args[4]
+        
+        print(f"http method: {http_method}")
+        print(f"request target: {request_target}")
+        print(f"http version: {http_version}")
+        
+        print(f"Host: {header_host}")
+        print(f"Agent: {user_agent}")
+        print(f"Type: {media_type}")
+        print(f"Body: {body}")
+            
+
         response = b"HTTP/1.1 404 Not Found\r\n\r\n"
         if len(args) > 1:
             path = args[0].split(" ")
