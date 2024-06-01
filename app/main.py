@@ -54,7 +54,7 @@ def request_handler(conn: socket.socket):
                             for word in f:
                                 lines += word
                             lines_len = len(lines)
-                        response = f"HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {len(lines_len)}\r\n\r\n{lines}".encode()
+                        response = f"HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {lines_len}\r\n\r\n{lines}".encode()
                     else:
                         print("Sending 404")
                         response = b"HTTP/1.1 404 Not Found\r\n\r\n"
