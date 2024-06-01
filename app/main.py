@@ -43,14 +43,21 @@ def request_handler(conn: socket.socket):
         print(f"Type: {media_type}")
         print(f"Body: {body}")
             
-
-        response = b"HTTP/1.1 404 Not Found\r\n\r\n"
+            
+        # Default responses
+        response_200 = b"HTTP/1.1 200 OK\r\n\r\n"
+        response_404 = b"HTTP/1.1 404 Not Found\r\n\r\n"
+        
+        # Custom responses
+        response_201 = f"HTTP/1.1 201 Created\r\n\r\n".encode()
+        
+        response = response_404
         if len(args) > 1:
             path = args[0].split(" ")
-            if path[1] == "/":
-                response = b"HTTP/1.1 200 OK\r\n\r\n"
-            if "echo" in path[1]:
-                string = path[1].replace("/echo/", "")
+            if request_target == "/":
+                response = response_200
+            elif request_target.startswith("/echo/"):
+                string = request_target.replace("/echo/", "")
                 response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
             if "user" in path[1]:
                 path = args[2]
