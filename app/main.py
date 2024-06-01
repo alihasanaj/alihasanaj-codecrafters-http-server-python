@@ -34,8 +34,7 @@ def request_handler(conn: socket.socket):
                 string = path.replace("User-Agent: ", "")
                 response = f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
             if "files" in path[1]:
-                
-                if "POST" in path:
+                if "POST" in path[0]:
                     directory = sys.argv[2]
                     try:
                         os.mkdir(directory)
