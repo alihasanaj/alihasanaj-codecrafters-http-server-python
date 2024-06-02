@@ -92,7 +92,7 @@ def request_handler(conn: socket.socket):
         response = response_404
         if "echo" in request_target or request_target == "/":
             response = echo_request(request=request_target, encoding_check=user_agent) 
-        elif "user" in user_agent:
+        elif "User" in user_agent:
             print("I made it here!")
             response =  user_request(user=user_agent)
         elif "files" in request_target:
