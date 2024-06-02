@@ -90,7 +90,7 @@ def request_handler(conn: socket.socket):
         supported_encodes = ["gzip"]
         
         response = response_404
-        if "echo" in request_target:
+        if "echo" in request_target or request_target == "/":
             response = echo_request(request=request_target, encoding_check=user_agent) 
         elif "files" in request_target:
                 if "POST" in http_method:
