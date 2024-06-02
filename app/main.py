@@ -22,7 +22,7 @@ def request_handler(conn: socket.socket):
         val = conn.recv(1024)
         pars = val.decode()
         args = pars.split("\r\n")
-        
+        print(f"Args: {args}")
         # Split the request line and extract http info
         request_line = args[0].split(" ")
         http_method = request_line[0]
@@ -39,7 +39,7 @@ def request_handler(conn: socket.socket):
         print(f"request target: {request_target}")
         print(f"http version: {http_version}")
         
-        print(f"Host: {header_host}")
+        print(f"{header_host}")
         print(f"Agent: {user_agent}")
         print(f"Type: {media_type}")
         print(f"Body: {req_body}")
