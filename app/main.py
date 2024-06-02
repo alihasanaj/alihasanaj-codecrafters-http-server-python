@@ -77,10 +77,10 @@ def request_handler(conn: socket.socket):
         #print(f"request target: {request_target}")
         #print(f"http version: {http_version}")
         
-        #print(f"{header_host}")
-        #print(f"Agent: {user_agent}")
-        #print(f"Type: {media_type}")
-        #print(f"Body: {req_body}")
+        print(f"{header_host}")
+        print(f"Agent: {user_agent}")
+        print(f"Type: {media_type}")
+        print(f"Body: {req_body}")
             
             
         
