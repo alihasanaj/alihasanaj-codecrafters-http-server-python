@@ -7,8 +7,8 @@ import gzip
 
 # Global 
 # Default responses
-response_200 = b"HTTP/1.1 200 OK\r\n\r\n"
-response_404 = b"HTTP/1.1 404 Not Found\r\n\r\n"
+response_200 = f"HTTP/1.1 200 OK\r\n\r\n"
+response_404 = f"HTTP/1.1 404 Not Found\r\n\r\n"
 
 # Custom responses
 response_201 = f"HTTP/1.1 201 Created\r\n\r\n".encode()
