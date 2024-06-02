@@ -73,14 +73,14 @@ def request_handler(conn: socket.socket):
         media_type = arguments[-2]
         req_body = arguments[-1]
         
-        print(f"http method: {http_method}")
-        print(f"request target: {request_target}")
-        print(f"http version: {http_version}")
+        #print(f"http method: {http_method}")
+        #print(f"request target: {request_target}")
+        #print(f"http version: {http_version}")
         
-        print(f"{header_host}")
-        print(f"Agent: {user_agent}")
-        print(f"Type: {media_type}")
-        print(f"Body: {req_body}")
+        #print(f"{header_host}")
+        #print(f"Agent: {user_agent}")
+        #print(f"Type: {media_type}")
+        #print(f"Body: {req_body}")
             
             
         
@@ -93,6 +93,7 @@ def request_handler(conn: socket.socket):
         if "echo" in request_target or request_target == "/":
             response = echo_request(request=request_target, encoding_check=user_agent) 
         elif "user" in user_agent:
+            print("I made it here!")
             response =  user_request(user=user_agent)
         elif "files" in request_target:
                 if "POST" in http_method:
