@@ -38,8 +38,6 @@ def echo_request(request, encoding_check):
             if "," in encoding_type:
                 encoding_type = encoding_check.replace(" ", "")
                 encoding_type = encoding_type.split(",")
-            
-            
             print(encoding_type)
             if "gzip" == encoding_type:
                 return  f"HTTP/1.1 200 OK\r\nContent-Encoding: {encoding_type}\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n".encode() + string
@@ -53,8 +51,10 @@ def echo_request(request, encoding_check):
         
 
 
-def post_request():
-    pass    
+def user_request(user):
+    string = user.replace("User-Agent: ", "")
+    return f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
+        
     
 def request_handler(conn: socket.socket):
         client_data = conn.recv(1024)
@@ -92,6 +92,8 @@ def request_handler(conn: socket.socket):
         response = response_404
         if "echo" in request_target or request_target == "/":
             response = echo_request(request=request_target, encoding_check=user_agent) 
+        elif "user" in user_agent:
+            response =  user_request(user=user_agent)
         elif "files" in request_target:
                 if "POST" in http_method:
                     directory = sys.argv[2]
