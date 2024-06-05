@@ -38,8 +38,8 @@ def echo_request(request, encoding_check):
                 return  f"HTTP/1.1 200 OK\r\nContent-Encoding: gzip\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n".encode() + string
             else:
                 return f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
-        else:
-            return f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
+        
+        return f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
         
 
 
@@ -66,11 +66,11 @@ def post_files(request_file, request_body):
         os.mkdir(directory)
     except FileExistsError as e:
         print(f"Directory {directory} already exist")
-        file = request_file.replace("/files/", "")
-        body = request_body
-        with open(os.path.join(directory, file), "w") as f:
-            f.write(body)
-        return response_201   
+    file = request_file.replace("/files/", "")
+    body = request_body
+    with open(os.path.join(directory, file), "w") as f:
+        f.write(body)
+    return response_201   
     
 def request_handler(conn: socket.socket):
 
