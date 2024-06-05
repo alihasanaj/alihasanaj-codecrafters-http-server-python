@@ -54,7 +54,31 @@ def echo_request(request, encoding_check):
 def user_request(user):
     string = user.replace("User-Agent: ", "")
     return f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
-        
+     
+def get_files(request_file):
+    directory = sys.argv[2]
+    file = request_file.replace("/files/", "")
+    if os.path.isfile(f"/{directory}/{file}"):
+        with open(f"/{directory}/{file}", "r") as f:
+            lines = ""
+            for word in f:
+                lines += word
+            lines_len = len(lines)
+        return f"HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {lines_len}\r\n\r\n{lines}".encode()
+    else:
+        return response_404
+
+def post_files(request_file, request_body):
+    directory = sys.argv[2]
+    try:
+        os.mkdir(directory)
+    except FileExistsError as e:
+        print(f"Directory {directory} already exist")
+        file = request_file.replace("/files/", "")
+        body = request_body
+        with open(os.path.join(directory, file), "w") as f:
+            f.write(body)
+        return response_201   
     
 def request_handler(conn: socket.socket):
         client_data = conn.recv(1024)
@@ -93,32 +117,12 @@ def request_handler(conn: socket.socket):
         if "echo" in request_target or request_target == "/":
             response = echo_request(request=request_target, encoding_check=user_agent) 
         elif "User" in user_agent:
-            print("I made it here!")
             response =  user_request(user=user_agent)
         elif "files" in request_target:
                 if "POST" in http_method:
-                    directory = sys.argv[2]
-                    try:
-                        os.mkdir(directory)
-                    except FileExistsError as e:
-                        print(f"Directory {directory} already exist")
-                    file = request_target.replace("/files/", "")
-                    body = req_body
-                    with open(os.path.join(directory, file), "w") as f:
-                        f.write(body)
-                    response = response_201
+                    response = post_files(request_file=request_target, request_body=req_body) 
                 else:
-                    directory = sys.argv[2]
-                    file = request_target.replace("/files/", "")
-                    if os.path.isfile(f"/{directory}/{file}"):
-                        with open(f"/{directory}/{file}", "r") as f:
-                            lines = ""
-                            for word in f:
-                                lines += word
-                            lines_len = len(lines)
-                        response = f"HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: {lines_len}\r\n\r\n{lines}".encode()
-                    else:
-                        response = response_404
+                    response = get_files(request_file=request_target,)
         print(f"Response Sent: {response}")   
         conn.sendall(response)
         conn.close()
