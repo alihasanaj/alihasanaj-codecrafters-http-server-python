@@ -34,16 +34,8 @@ def echo_request(request, encoding_check):
         string = request.replace("/echo/", "")
         if "Encoding" in encoding_check:
             string = gzip.compress(string.encode("utf-8"))
-            encoding_type = encoding_check.replace("Accept-Encoding: ", "")
-            if "," in encoding_type:
-                encoding_type = encoding_check.replace(" ", "")
-                encoding_type = encoding_type.split(",")
-            print(encoding_type)
-            if "gzip" == encoding_type:
-                return  f"HTTP/1.1 200 OK\r\nContent-Encoding: {encoding_type}\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n".encode() + string
-            elif "gzip" in encoding_type:
-                index = encoding_type.index("gzip")
-                return f"HTTP/1.1 200 OK\r\nContent-Encoding: {encoding_type[index]}\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
+            if "gzip" in encoding_check:
+                return  f"HTTP/1.1 200 OK\r\nContent-Encoding: gzip\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n".encode() + string
             else:
                 return f"HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: {len(string)}\r\n\r\n{string}".encode()
         else:
@@ -81,6 +73,7 @@ def post_files(request_file, request_body):
         return response_201   
     
 def request_handler(conn: socket.socket):
+
         client_data = conn.recv(1024)
         decoded_data = client_data.decode()
         arguments = decoded_data.split("\r\n")
@@ -108,21 +101,18 @@ def request_handler(conn: socket.socket):
             
             
         
-        
-        
-        # supported encoding
-        supported_encodes = ["gzip"]
-        
         response = response_404
         if "echo" in request_target or request_target == "/":
             response = echo_request(request=request_target, encoding_check=user_agent) 
         elif "User" in user_agent:
             response =  user_request(user=user_agent)
         elif "files" in request_target:
-                if "POST" in http_method:
-                    response = post_files(request_file=request_target, request_body=req_body) 
-                else:
-                    response = get_files(request_file=request_target,)
+            if "POST" in http_method:
+                response = post_files(request_file=request_target, request_body=req_body) 
+            else:
+                response = get_files(request_file=request_target,)
+                
+                
         print(f"Response Sent: {response}")   
         conn.sendall(response)
         conn.close()
